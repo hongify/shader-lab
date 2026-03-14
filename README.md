@@ -1,18 +1,26 @@
 # Shader Programming Project 2024-2
 
-Interactive grass system in Unity, focused on efficient GPU computation and real-time interaction.
-
-### Core Implementation
-- **GPU Indirect Instancing**: High-performance rendering for dense grass fields. 
-- **Compute Shader Physics**: Blade-character interaction and trample logic processed on the GPU.
-- **Stylized Rendering**: Custom Toon Shader involving step-based lighting and vertex deformation.
-- **Bezier Pathing**: Smooth character movement simulation using Cubic Bezier curves.
-
-### Project Files
-- `GrassTrampleController.cs`: Manages GPU buffers and indirect draw calls.
-- `GrassTrample.compute`: Parallel computation of grass bending and restoration.
-- `GrassToon.shader`: Handles the visual presentation and vertex offsets.
-- `BezierMovement.cs`: Path-based movement utility for interaction testing.
+A real-time interactive grass system developed for a university shader programming course. This project focuses on offloading complex grass physics and dense rendering workloads to the GPU to maintain high performance in Unity.
 
 ---
-*2024-2 University Course Work*
+
+### GPU-Driven Architecture
+
+The system is built on **GPU Indirect Instancing**, which allows for the drawing of thousands of uniquely transformed grass blades in a single draw call. By bypassing the traditional GameObject-based approach, CPU overhead is minimized, and the rendering bottleneck is shifted to the GPU where it belongs for this type of dense procedural geometry.
+
+### Parallel Physics with Compute Shaders
+
+Real-time interactions, such as grass trampling and bending, are handled via **Compute Shaders**.
+- **Dynamic Interaction**: The positions of interactive entities (e.g., player, NPCs) are passed to the GPU every frame.
+- **Buffer Management**: A `ComputeBuffer` stores the state of each grass clump, which is updated in parallel using a GPU kernel.
+- **Physical Response**: The bending logic calculates distance-based displacement, ensuring the grass reacts fluidly to movements while maintaining a memory of its state for restoration.
+
+### Stylized Technical Rendering
+
+The visual presentation uses a custom **Toon Surface Shader** that works in tandem with the GPU buffer.
+- **Vertex Deformation**: The shader reads interaction data directly from the structured buffer to apply vertex offsets for bending and swaying.
+- **NdotL Lighting**: Implements a step-based light model to achieve a clean, illustrated aesthetic common in modern stylized games.
+- **Procedural Variation**: Individual grass blades are randomized based on noise values calculated during initialization to avoid repetitive patterns.
+
+---
+*2024-2 University Course Work / Unity 2021.3+*
